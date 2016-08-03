@@ -254,7 +254,7 @@ class Tabs {
 		$indices = array(); // this is to most accurately count the amount of <tab>s in this <tabs> tag.
 		foreach ($parser->tabsData['labels'] as $i => $n) {
 			$indices[] = $i;
-			$labels .= $this->makeLabel($i, $n, $count);
+			$labels .= $this->makeLabel($i, preg_match("/\[\[File:.+\]\]/", $n) ? $parser->recursiveTagParse($n) : $n, $count);
 		}
 		if (!count($indices)) { // If no tabs have been defined, add this plain default tab.
 			$indices[] = 1;
@@ -338,7 +338,6 @@ class Tabs {
 	 * @return string HTML code of the label
 	 */
 	public function makeLabel($tabN, $label, $tagN) {
-		$label = htmlspecialchars($label);
 		return "<input type=\"radio\" form=\"tabs-inputform\" id=\"tabs-input-$tagN-$tabN\" name=\"tabs-$tagN\" class=\"tabs-input tabs-input-$tabN\"/>".
 				"<label class=\"tabs-label\" for=\"tabs-input-$tagN-$tabN\" data-tabpos=\"$tabN\">$label</label><wbr/>";
 	}
